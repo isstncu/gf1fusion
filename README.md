@@ -1,2 +1,2 @@
 # gfifusion
-Condition Diffusion Model for GF1 image 
+# Condition Diffusion Model for GF1 image fusion
