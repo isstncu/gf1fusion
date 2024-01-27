@@ -1,5 +1,5 @@
 """
-test
+Test
 """
 
 import argparse
