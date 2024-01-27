@@ -1,6 +1,4 @@
 """
-Generate a large batch of samples from a super resolution model, given a batch
-of samples from a regular model from image_sample.py.
 """
 import datetime
 import time
