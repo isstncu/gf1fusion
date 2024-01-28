@@ -55,14 +55,14 @@ def main():
     )
     logger.log("creating samples...")
     all_images = []
-    for j, super_data in enumerate(data):
+    for j, Data in enumerate(data):
         print(j)
-        res = dict(low_res=super_data[0][0], pan_res=super_data[0][1],ms_res=super_data[0][2])
+        res = dict(low_res=Data[0][0], pan_res=Data[0][1],ms_res=Data[0][2])
         model_kwargs = {k: v.to(dist_util.dev()) for k, v in res.items()}
         torch.manual_seed(1)
         sample = diffusion.p_sample_loop(
                     model,
-                    (super_data[0][0].shape[0], 4, 128, 128),
+                    (Data[0][0].shape[0], 4, 128, 128),
                     clip_denoised=args.clip_denoised,
                     model_kwargs=model_kwargs,)
         sample = th.div(sample, 0.0001)
