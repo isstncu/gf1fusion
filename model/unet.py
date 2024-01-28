@@ -39,7 +39,7 @@ class TimestepEmbedSequential(nn.Sequential, TimestepBlock):
     support it as an extra input.
     """
 
-    def forward(self, x, emb):  # x就是xt,如果这一层是TimestepBlock对象就才加emb
+    def forward(self, x, emb):  # 
         for layer in self:
             if isinstance(layer, TimestepBlock):
                 x = layer(x, emb)
@@ -105,7 +105,7 @@ class Downsample(nn.Module):
         return self.op(x)
 
 
-class ResBlock(TimestepBlock):  # 只有这里用到了TimestepBlock
+class ResBlock(TimestepBlock): 
     """
     A residual block that can optionally change the number of channels.
 
@@ -195,7 +195,7 @@ class ResBlock(TimestepBlock):  # 只有这里用到了TimestepBlock
         else:
             h = h + emb_out
             h = self.out_layers(h)
-        return self.skip_connection(x) + h  ##
+        return self.skip_connection(x) + h  
 
 
 class AttentionBlock(nn.Module):
@@ -408,21 +408,21 @@ class UNetModel(nn.Module):
         self.num_heads_upsample = num_heads_upsample
 
         time_embed_dim = model_channels * 4
-        # 先把模型输入到这个unet上面
+        
         self.time_embed = nn.Sequential(
             linear(model_channels, time_embed_dim),
             SiLU(),
             linear(time_embed_dim, time_embed_dim),
         )
-        # 如果是条件生成的话，还要下面这个
+        
         if self.num_classes is not None:
             self.label_emb = nn.Embedding(num_classes, time_embed_dim)
-        # UNET左边那部分第一层
+     
         self.input_blocks = nn.ModuleList(
             [
                 Start_layer(model_channels,dims)
                 
-                #conv_nd(dims, 13, model_channels, 3, padding=1)  # 对Times进行一个判断是否属于这里面的，属于要加embd
+                #conv_nd(dims, 13, model_channels, 3, padding=1)  
 
             ]
         )
@@ -445,13 +445,13 @@ class UNetModel(nn.Module):
                 ]
                 ch = mult * model_channels
                 # self.input_blocks.append(TimestepEmbedSequential(*layers))
-                if ((level > 0) and (level != len(channel_mult) - 1)):  # ds表示下采样的比例，判断是否需要加入attention
+                if ((level > 0) and (level != len(channel_mult) - 1)):  
                     layers.append(
                         AttentionBlock1(
                             ch, use_checkpoint=use_checkpoint, num_heads=num_heads
                         )
                     )
-                self.input_blocks.append(TimestepEmbedSequential(*layers))  # 遍历循环层数后，进入Downsample
+                self.input_blocks.append(TimestepEmbedSequential(*layers))  
                 input_block_chans.append(ch)
             if level != len(channel_mult) - 1:
                 self.input_blocks.append(
@@ -459,7 +459,7 @@ class UNetModel(nn.Module):
                 )
                 input_block_chans.append(ch)
                 ds *= 2
-        # 中间层
+        
         self.middle_block = TimestepEmbedSequential(
             ResBlock(
                 ch,
@@ -479,7 +479,7 @@ class UNetModel(nn.Module):
                 use_scale_shift_norm=use_scale_shift_norm,
             ),
         )
-        # 右边那一块
+        
         self.output_blocks = nn.ModuleList([])
         for x, (level, mult) in enumerate(list(enumerate(channel_mult))[::-1]):
 
@@ -509,7 +509,7 @@ class UNetModel(nn.Module):
                     layers.append(Upsample(ch, conv_resample, dims=dims))
                     ds //= 2
                 self.output_blocks.append(TimestepEmbedSequential(*layers))
-        # 最后一个模块，对输出进行一次变换
+        
         self.out = nn.Sequential(
             normalization(ch),
             SiLU(),
@@ -539,7 +539,7 @@ class UNetModel(nn.Module):
         """
         return next(self.input_blocks.parameters()).dtype
 
-    def forward(self, x, timesteps, low_res, pan_res, downpan_res, ms_res,downwfv_res,y=None):  # 这里的y是作为条件生成的
+    def forward(self, x, timesteps, low_res, pan_res, downpan_res, ms_res,downwfv_res,y=None):  
         """
         Apply the model to an input batch.
 
@@ -553,8 +553,8 @@ class UNetModel(nn.Module):
         ), "must specify y if and only if the model is class-conditional"
 
         hs = []
-        emb = self.time_embed(timestep_embedding(timesteps, self.model_channels))  # 正余弦初始化
-        # 判断是否有条件生成
+        emb = self.time_embed(timestep_embedding(timesteps, self.model_channels))  
+        
         if self.num_classes is not None:
             assert y.shape == (x.shape[0],)
             emb = emb + self.label_emb(y)
@@ -597,7 +597,7 @@ class UNetModel(nn.Module):
              cat_in = th.cat([h, hs.pop()], dim=1)
              h = module(cat_in, emb)
         output_num = 0
-        h = h.type(x.dtype)  # h换成与x类型一致
+        h = h.type(x.dtype)  
 
         return self.out(h)
 
