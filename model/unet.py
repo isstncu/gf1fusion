@@ -233,17 +233,12 @@ class AttentionBlock(nn.Module):
         return (x + h).reshape(b, c, *spatial)
 
 
-class AttentionBlock1(nn.Module):
-    """
-    An attention block that allows spatial positions to attend to each other.
-
-    Originally ported from here, but adapted to the N-d case.
-    https://github.com/hojonathanho/diffusion/blob/1e0dceb3b3495bbe19116a5e1b3596cd0706c543/diffusion_tf/models/unet.py#L66.
-    """
+class Cross attention(nn.Module):
+    
 
     def __init__(self, channels, num_heads=1, use_checkpoint=False):
         super().__init__()
-        self.channels = channels  #
+        self.channels = channels  
         self.num_heads = num_heads
         self.use_checkpoint = use_checkpoint
 
@@ -447,7 +442,7 @@ class UNetModel(nn.Module):
                 # self.input_blocks.append(TimestepEmbedSequential(*layers))
                 if ((level > 0) and (level != len(channel_mult) - 1)):  
                     layers.append(
-                        AttentionBlock1(
+                        Cross attention(
                             ch, use_checkpoint=use_checkpoint, num_heads=num_heads
                         )
                     )
@@ -499,7 +494,7 @@ class UNetModel(nn.Module):
                 # if ds in attention_resolutions:
                 # if (x > 0) and (x < 5):
                     # layers.append(
-                        # AttentionBlock1(
+                        # Cross attention(
                             # ch,
                             # use_checkpoint=use_checkpoint,
                             # num_heads=num_heads_upsample,
