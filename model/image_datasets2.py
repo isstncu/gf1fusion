@@ -27,10 +27,10 @@ class DataSet(Dataset):
         super(DataSet, self).__init__()
         self.root_dir = train_dir
         self.extension = '.tif'
-        self.input1_dir = os.path.join(self.root_dir, 'output1')
-        self.input2_dir = os.path.join(self.root_dir, 'input3')
-        self.input3_dir = os.path.join(self.root_dir, 'input1')
-        self.input4_dir = os.path.join(self.root_dir, 'input2')
+        self.input1_dir = os.path.join(self.root_dir, 'predicted pansharpen')
+        self.input2_dir = os.path.join(self.root_dir, 'predicted WFV')
+        self.input3_dir = os.path.join(self.root_dir, 'Reference Pan')
+        self.input4_dir = os.path.join(self.root_dir, 'Reference Ms')
         self.allnames = self._get_pair_path()
         # assert len(self.allnames_list[0]) == len(self.input2_lists)  # 如果两个列表下的数组长度一样，则不会报错
 
