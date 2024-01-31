@@ -569,7 +569,7 @@ class UNetModel(nn.Module):
             # for name,params in module.named_modules():
             elif i in inpuy_att:
                 h = module[0](h, emb)
-                h = module[1](h, torch.cat([downpan_res[input_num_pan[input_num]],0.01*downwfv_res[input_num_pan[input_num]]],dim=1))
+                h = module[1](h, torch.cat([downpan_res[input_num_pan[input_num]],0.1*downwfv_res[input_num_pan[input_num]]],dim=1))
                 hs.append(h)
                 input_num = input_num + 1
             else:
@@ -657,7 +657,7 @@ class SuperResModel(UNetModel):
             downpan_res.append(torch.from_numpy(np.absolute(cH5) + np.absolute(cV5) + np.absolute(cD5)).to(dist_util.dev()))
             down_size=[2,4,8,16,32]
             for i in  down_size:                  
-                   downwfv_res.append((F.interpolate(low_res, size=[128//i, 128//i], mode="bilinear",align_corners=True)).to(dist_util.dev()))
+                   downwfv_res.append(0.1*(F.interpolate(low_res, size=[128//i, 128//i], mode="bilinear",align_corners=True)).to(dist_util.dev()))
 
         return super().forward(x, timesteps, low_res, pan_res, downpan_res, ms_res,downwfv_res, **kwargs)
 
