@@ -22,8 +22,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 def create_argparser():
     defaults = dict(
         base_samples="test_data",#test data directory
-        model_path="ema_0.9999_200000.pt",# path to test the model
-        save_data_path="save_data",#  path to save the test data
+        model_path="ema_0.9999_200000.pt",#path to test the model
+        save_data_path="save_data",#path to save the test data
         timestep_respacing="ddim250",#Accelerated sampling step size
         clip_denoised=True,
         batch_size=120,
