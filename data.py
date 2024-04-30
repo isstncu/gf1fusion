@@ -87,7 +87,7 @@ def image_together(image,corners,filepath,data):
     del dataset
 
 def main():
-    #Image to be cropped
+    #image to be cropped
     crop_image ="t2_1_WFV.tif"
     save_dir ="test"
     Crop_Image(crop_image,save_dir) 
