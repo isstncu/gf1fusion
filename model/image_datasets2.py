@@ -32,7 +32,7 @@ class DataSet(Dataset):
         self.input3_dir = os.path.join(self.root_dir, 'Reference Pan')
         self.input4_dir = os.path.join(self.root_dir, 'Reference Ms')
         self.allnames = self._get_pair_path()
-        # assert len(self.allnames_list[0]) == len(self.input2_lists)  # 如果两个列表下的数组长度一样，则不会报错
+        # assert len(self.allnames_list[0]) == len(self.input2_lists)  
 
     def __getitem__(self, index):
         allimage,cond= self._load_image_pair(index)
@@ -47,7 +47,7 @@ class DataSet(Dataset):
         names_input2 = natsorted(glob.glob(os.path.join(self.input2_dir, '*' + self.extension)))
         names_input3 = natsorted(glob.glob(os.path.join(self.input3_dir, '*' + self.extension)))
         names_input4 = natsorted(glob.glob(os.path.join(self.input4_dir, '*' + self.extension)))
-        # 获得self.input1_dir路径下所有的tif文件，且把文件名按自然排序
+        
         allnames=[]
         allnames.append(names_input1[MPI.COMM_WORLD.Get_rank():][::MPI.COMM_WORLD.Get_size()])
         allnames.append(names_input2[MPI.COMM_WORLD.Get_rank():][::MPI.COMM_WORLD.Get_size()])
