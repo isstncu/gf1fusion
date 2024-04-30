@@ -21,8 +21,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
 def create_argparser():
     defaults = dict(
-        base_samples="/home/jbwei/Lgan/improv_diffusion/improved-diffusion-main2/script/sample_data",#test data directory
-        model_path="save_model/ema_0.9999_000000.pt",#path to test the model
+        base_samples="sample_data",#test data directory
+        model_path="ema_0.9999_000000.pt",#path to test the model
         save_data_path="save_data/",#path to save the test data
         clip_denoised=True,
         batch_size=6,
