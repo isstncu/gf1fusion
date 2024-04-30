@@ -17,7 +17,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]='0'
 
 def create_argparser():
     defaults = dict(
-        data_dir="/home/jbwei/Lgan/improv_diffusion/improved-diffusion-main2/script/sample_data",#the training data directory
+        data_dir="sample_data",#the training data directory
         lr=1e-4,#the initial learning rate
         lr_anneal_steps=250000,#number of steps to train
         log_interval=500,#Interval for printing logs
@@ -32,7 +32,7 @@ def create_argparser():
         use_fp16=False,
         fp16_scale_growth=1e-3,
     )
-    diffusion_steps=500#Total step size of diffusion
+    diffusion_steps=1000#Total step size of diffusion
     defaults.update(sr_model_and_diffusion_defaults())
     defaults['diffusion_steps']=diffusion_steps
     parser = argparse.ArgumentParser()
