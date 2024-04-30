@@ -17,19 +17,21 @@ from model.script_util import (
     add_dict_to_argparser,
 )
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
 def create_argparser():
     defaults = dict(
-        base_samples="test_data",#test data directory
-        model_path="ema_0.9999_200000.pt",#path to test the model
-        save_data_path="save_data",#path to save the test data
-        timestep_respacing="ddim250",#Accelerated sampling step size
+        base_samples="/home/jbwei/Lgan/improv_diffusion/improved-diffusion-main2/script/sample_data",#test data directory
+        model_path="save_model/ema_0.9999_000000.pt",#path to test the model
+        save_data_path="save_data/",#path to save the test data
         clip_denoised=True,
-        batch_size=120,
+        batch_size=6,
         use_ddim=True,
     )
+    diffusion_steps=1000#Total step size of diffusion
     defaults.update(sr_model_and_diffusion_defaults())
+    defaults['diffusion_steps']=diffusion_steps
+    defaults['timestep_respacing']="ddim250"#Accelerated sampling step size
     parser = argparse.ArgumentParser()
     add_dict_to_argparser(parser, defaults)
     return parser
@@ -50,8 +52,7 @@ def main():
     logger.log("loading data...")
     data = load_data(
         data_dir=args.base_samples,
-        batch_size=args.batch_size,
-        class_cond=args.class_cond,
+        batch_size=args.batch_size
     )
     logger.log("creating samples...")
     all_images = []
