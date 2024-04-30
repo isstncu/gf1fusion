@@ -15,6 +15,8 @@ def model_and_diffusion_defaults():
         num_heads=1,
         num_heads_upsample=-1,
         attention_resolutions="16",
+        timestep_respacing="",#Accelerated sampling step size
+        diffusion_steps=1000,#Total step size of diffusion
         dropout=0,
         learn_sigma=True,
         sigma_small=False,
@@ -31,14 +33,14 @@ def model_and_diffusion_defaults():
 
 def create_model_and_diffusion(
     image_size,
-    class_cond,#ÓĞÎŞÌõ¼ş
-    learn_sigma,#ÊÇ·ñĞèÒªÔ¤²â·½²î
+    class_cond,#æœ‰æ— æ¡ä»¶
+    learn_sigma,#æ˜¯å¦éœ€è¦é¢„æµ‹æ–¹å·®
     sigma_small,
     num_channels,
     num_res_blocks,
     num_heads,
     num_heads_upsample,
-    attention_resolutions,#¼ÓÈë×¢ÒâÁ¦Ä£¿é
+    attention_resolutions,#åŠ å…¥æ³¨æ„åŠ›æ¨¡å—
     dropout,
     diffusion_steps,
     noise_schedule,
@@ -49,7 +51,8 @@ def create_model_and_diffusion(
     rescale_learned_sigmas,
     use_checkpoint,
     use_scale_shift_norm,
-):
+):  
+    
     model = create_model(
         image_size,
         num_channels,
@@ -124,9 +127,11 @@ def sr_model_and_diffusion_defaults():
     res["large_size"] = 256
     res["small_size"] = 64
     arg_names = inspect.getfullargspec(sr_create_model_and_diffusion)[0]
+    
     for k in res.copy().keys():
         if k not in arg_names:
             del res[k]
+    
     return res
 
 
@@ -150,7 +155,7 @@ def sr_create_model_and_diffusion(
     rescale_learned_sigmas,
     use_checkpoint,
     use_scale_shift_norm,
-):
+):  
     model = sr_create_model(
         large_size,
         small_size,
@@ -220,7 +225,7 @@ def sr_create_model(
         use_scale_shift_norm=use_scale_shift_norm,
     )
 
-#Éú³ÉÒ»¸öÀ©É¢Ä£ĞÍ¿ò¼Ü
+#ç”Ÿæˆä¸€ä¸ªæ‰©æ•£æ¨¡å‹æ¡†æ¶
 def create_gaussian_diffusion(
     *,
     steps=1000,
@@ -233,7 +238,7 @@ def create_gaussian_diffusion(
     rescale_learned_sigmas=False,
     timestep_respacing="",
 ):
-    betas = gd.get_named_beta_schedule(noise_schedule, steps)#ÉèÖÃ¼ÓÔë·½°¸
+    betas = gd.get_named_beta_schedule(noise_schedule, steps)#è®¾ç½®åŠ å™ªæ–¹æ¡ˆ
 
     if use_kl:
         loss_type = gd.LossType.RESCALED_KL
