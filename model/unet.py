@@ -233,7 +233,7 @@ class AttentionBlock(nn.Module):
         return (x + h).reshape(b, c, *spatial)
 
 
-class Cross attention(nn.Module):
+class Cross_attention(nn.Module):
     
 
     def __init__(self, channels, num_heads=1, use_checkpoint=False):
@@ -442,7 +442,7 @@ class UNetModel(nn.Module):
                 # self.input_blocks.append(TimestepEmbedSequential(*layers))
                 if ((level > 0) and (level != len(channel_mult) - 1)):  
                     layers.append(
-                        Cross attention(
+                        Cross_attention(
                             ch, use_checkpoint=use_checkpoint, num_heads=num_heads
                         )
                     )
@@ -494,7 +494,7 @@ class UNetModel(nn.Module):
                 # if ds in attention_resolutions:
                 # if (x > 0) and (x < 5):
                     # layers.append(
-                        # Cross attention(
+                        # Cross_attention(
                             # ch,
                             # use_checkpoint=use_checkpoint,
                             # num_heads=num_heads_upsample,
