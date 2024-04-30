@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 
 
 def load_data(*, data_dir, batch_size, class_cond=False, deterministic=False):
+    print()
     if not data_dir:
         raise ValueError("unspecified data directory")
     dataset = DataSet(data_dir)
@@ -27,13 +28,13 @@ def load_data(*, data_dir, batch_size, class_cond=False, deterministic=False):
 
 
 class DataSet(Dataset):
-    def __init__(self, train_dir):
+    def __init__(self, data_dir):
         super(DataSet, self).__init__()
-        self.root_dir = train_dir
+        self.root_dir = data_dir
         self.extension = '.tif'
-        self.input2_dir = os.path.join(self.root_dir, 'predicted WFV')
-        self.input3_dir = os.path.join(self.root_dir, 'Reference Pan')
-        self.input4_dir = os.path.join(self.root_dir, 'Reference Ms')
+        self.input1_dir = os.path.join(self.root_dir, 'predicted WFV')
+        self.input2_dir = os.path.join(self.root_dir, 'Reference Pan')
+        self.input3_dir = os.path.join(self.root_dir, 'Reference Ms')
         self.allnames = self._get_pair_path()
 
 
