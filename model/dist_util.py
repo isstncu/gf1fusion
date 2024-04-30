@@ -32,11 +32,11 @@ def setup_dist():
         hostname = "localhost"
     else:
         hostname = socket.gethostbyname(socket.getfqdn())
-    os.environ["MASTER_ADDR"] = comm.bcast(hostname, root=0)#hostname表示需要传播给其他进程的值
+    os.environ["MASTER_ADDR"] = comm.bcast(hostname, root=0)#hostname
     os.environ["RANK"] = str(comm.rank)
     os.environ["WORLD_SIZE"] = str(comm.size)
 
-    port = comm.bcast(_find_free_port(), root=0)#还传播了一个port
+    port = comm.bcast(_find_free_port(), root=0)#port
     os.environ["MASTER_PORT"] = str(port)
     dist.init_process_group(backend=backend, init_method="env://")
 
